@@ -288,8 +288,22 @@ function isContainNumber(num, digit) {
  *  [2, 3, 9, 5] => 2       => 2 + 3 === 5 then balance element is 9 and its index = 2
  *  [1, 2, 3, 4, 5] => -1   => no balance element
  */
-function getBalanceIndex(/* arr */) {
-  throw new Error('Not implemented');
+function getBalanceIndex(arr) {
+  let overallSum = 0;
+
+  for (let i = 0; i < arr.length; i += 1) {
+    overallSum += arr[i];
+  }
+  let sumLeft = 0;
+  let sumRight = overallSum - arr[0];
+  for (let i = 1; i < arr.length; i += 1) {
+    sumLeft += arr[i - 1];
+    sumRight -= arr[i];
+    if (sumLeft === sumRight) {
+      return i;
+    }
+  }
+  return -1;
 }
 
 /**
@@ -313,8 +327,45 @@ function getBalanceIndex(/* arr */) {
  *          [10, 9,  8,  7]
  *        ]
  */
-function getSpiralMatrix(/* size */) {
-  throw new Error('Not implemented');
+function getSpiralMatrix(size) {
+  const result = [];
+  for (let i = 0; i < size; i += 1) {
+    result[i] = [];
+    for (let j = 0; j < size; j += 1) {
+      result[i][j] = [undefined];
+    }
+  }
+
+  let curNum = 1;
+  const curPosition = [0, 0];
+  let squareSize = size - 1;
+  const finalPosition = [squareSize, squareSize];
+
+  while (squareSize >= -1) {
+    while (
+      curPosition[0] !== finalPosition[0] ||
+      curPosition[1] !== finalPosition[1]
+    ) {
+      if (curPosition[1] !== finalPosition[1]) {
+        result[curPosition[0]][curPosition[1]] = curNum;
+        curPosition[1] += finalPosition[1] > curPosition[1] ? 1 : -1;
+      } else {
+        result[curPosition[0]][curPosition[1]] = curNum;
+        curPosition[0] += finalPosition[0] > curPosition[0] ? 1 : -1;
+      }
+      curNum += 1;
+    }
+    squareSize -= 1;
+    if (finalPosition[0] === finalPosition[1]) {
+      finalPosition[0] -= squareSize;
+      finalPosition[1] -= squareSize + 1;
+    } else if (finalPosition[0] === finalPosition[1] + 1) {
+      finalPosition[0] += squareSize;
+      finalPosition[1] += squareSize + 1;
+    }
+  }
+
+  return result;
 }
 
 /**
